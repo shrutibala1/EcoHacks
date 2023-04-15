@@ -7,3 +7,5 @@ def index(request):
 
 
 
+def goToMap(request):
+    return render(request, 'main/map.html')

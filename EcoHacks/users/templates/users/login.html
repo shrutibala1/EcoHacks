@@ -1,0 +1,85 @@
+<style>
+     html, body {
+     display: flex;
+     justify-content: center;
+     height: 100%;
+     }
+     body, div, h1, form, input, p {
+     background-color: #ECFFD9;
+     padding: 0;
+     margin: 10;
+     outline: none;
+     font-family: Roboto, Arial, sans-serif;
+     font-size: 15px;
+     color: #666;
+     }
+     p1 {
+     position:absolute; center:50%; top:75%;
+     }
+     h1 {
+     width: 50%
+     margin: auto
+     padding: 10px 0;
+     font-size: 40px;
+     font-weight: 300;
+     text-align: left;
+     position: absolute;               /* 2 */
+     top: 50%;
+    center: 50%;
+     transform: translate(-10%, -350%) }
+     }
+
+     hr {
+     color: #a9a9a9;
+     opacity: 0.3;
+     }
+
+     form {
+     position:absolute; center:50%; top:40%;
+     margin: 0 50px;
+     align-items: right;
+     }
+
+     input {
+
+     left: 500px
+     width: 150%;
+     height: 36px;
+     margin: 13px 0 0 -5px;
+     padding-left: 10px;
+     border-radius: 0 5px 5px 0;
+     border: solid 1px #cbc9c9;
+     box-shadow: 1px 2px 5px rgba(0,0,0,.09);
+     background: #fff;
+     }
+     .btn-block {
+     margin-top: 10px;
+     text-align: center;
+     }
+     button {
+     width: 100%;
+     padding: 10px 0;
+     margin: 10px auto;
+     border-radius: 5px;
+     border: none;
+     background: #437710;
+     font-size: 14px;
+     font-weight: 600;
+     color: #fff;
+     }
+     button:hover {
+     background: #2F540A;
+     }
+   </style>
+<h1>Login</h1>
+
+<form action="" method="POST">
+   {% csrf_token %}
+   {% for field in form %}
+       <p>{{ field.label }}: <br> {{ field }}</p>
+   {% endfor %}
+   <button type="submit">Login</button>
+</form>
+
+<p1>Don't have an account? <a href="{% url 'register' %}">Signup here</a></p1>
+
