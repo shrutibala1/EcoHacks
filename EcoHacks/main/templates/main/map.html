@@ -13,10 +13,44 @@
   <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4twqZA-AhOLxsZiKICQgST-pzMfTcxgA&callback=initMap">
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div id="map"></div>
-  <script>
+  <div>
+    <label for="origin">Origin:</label>
+    <input type="text" id="origin" name="origin">
+    <label for="destination">Destination:</label>
+    <input type="text" id="destination" name="destination">
+    <button onclick="calculateRoutes()">Calculate Routes</button>
+  </div>
+  <div>
+    <h3>Car Information</h3>
+    <label for="fuel-efficiency">Fuel Efficiency for Car(mpg):</label>
+    <input type="number" id="fuel-efficiency" name="fuel-efficiency" step="0.1">
+    <br>
+    <label for="fuel-type">Fuel Type for Car:</label>
+    <select id="fuel-type" name="fuel-type">
+      <option value="gas">Gas</option>
+      <option value="diesel">Diesel</option>
+    </select>
+  </div>
+  <div>
+    <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
+    <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
+    <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
+    <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
+  </div>
+  <div>
+    <span>Distance: <span id="distance"></span></span>
+    <br>
+    <span>Emissions: <span id="emissions"></span></span>
+  </div>
+  <div>
+    <h3>CO2 Emissions Comparison</h3>
+    <canvas id="emissionsChart"></canvas>
+  </div>
+    <script>
     function initMap() {
       const mapOptions = {
         center: { lat: 38.0356849, lng: -78.5131093 },
@@ -47,8 +81,11 @@
 
         document.getElementById("distance").textContent = distance;
         document.getElementById("emissions").textContent = emissions;
+
+        createEmissionsChart(emissions); // Call the createEmissionsChart function with trip emissions
       }
     }
+
 
     function calculateRoutes() {
       const origin = document.getElementById("origin").value;
@@ -129,38 +166,45 @@
       const distanceInMiles = distance * 0.000621371; // Convert distance from meters to miles
       const emissionsPerMile = 0.039 / 2; // 0.039 kg CO2 for 2 miles
       const emissionsInKilograms = distanceInMiles * emissionsPerMile;
-
       return emissionsInKilograms * 1000; // Convert kilograms to grams
+    }
+    let emissionsChart; // Declare a global variable to store the chart instance
+    function createEmissionsChart(tripEmissions) {
+      const ctx = document.getElementById('emissionsChart').getContext('2d');
+      // Destroy the previous chart instance if it exists
+      if (emissionsChart) {
+        emissionsChart.destroy();
+      }
+      const dailyAllowedEmissions = 4000;
+      const chartData = {
+        labels: ['Daily Allowed', 'Trip Emissions'],
+        datasets: [{
+          label: 'CO2 Emissions (grams)',
+          data: [dailyAllowedEmissions, tripEmissions],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 99, 132, 1)',
+          ],
+          borderWidth: 1,
+        }]
+      };
+      const chartOptions = {
+        scales: {
+          y: {
+            beginAtZero: true,
+          }
+        },
+      };
+      emissionsChart = new Chart(ctx, { // Store the chart instance in the global variable
+        type: 'bar',
+        data: chartData,
+        options: chartOptions,
+      });
     }
   </script>
 </body>
-<div>
-  <label for="origin">Origin:</label>
-  <input type="text" id="origin" name="origin">
-  <label for="destination">Destination:</label>
-  <input type="text" id="destination" name="destination">
-  <button onclick="calculateRoutes()">Calculate Routes</button>
-</div>
-<div>
-  <h3>Car Information</h3>
-  <label for="fuel-efficiency">Fuel Efficiency for Car(mpg):</label>
-  <input type="number" id="fuel-efficiency" name="fuel-efficiency" step="0.1">
-  <br>
-  <label for="fuel-type">Fuel Type for Car:</label>
-  <select id="fuel-type" name="fuel-type">
-    <option value="gas">Gas</option>
-    <option value="diesel">Diesel</option>
-  </select>
-</div>
-<div>
-  <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
-  <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
-  <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
-  <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
-</div>
-<div>
-  <span>Distance: <span id="distance"></span></span>
-  <br>
-  <span>Emissions: <span id="emissions"></span></span>
-</div>
 </html>
