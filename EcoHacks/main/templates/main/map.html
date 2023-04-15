@@ -10,6 +10,7 @@
   <input type="text" id="destination" name="destination">
   <button onclick="calculateRoutes()">Calculate Routes</button>
   </div>
+  choose the button you want!
   <div id="button-column">
   <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
   <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
@@ -24,19 +25,33 @@
       height: 400px;
       width: calc(100% - 300px);
       padding-right: 30px;
-      float: right;
+      margin: 25px auto; /* Center the map horizontally */
+      display: block; /* Set display property to block to center the map */
+
     }
     #button-column {
       display: flex;
       flex-direction: column;
-      height: 400px;
-      width: 20%;
+      width: 10%;
       float: left;
-      padding: 0 10px;
+      padding: 25px 10px;
       box-sizing: border-box;
     }
     #controls > div {
       margin-bottom: 20px;
+    }
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #0077cc;
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005ea8;
     }
   </style>
   <script async
@@ -49,7 +64,7 @@
   <script>
     function initMap() {
       const mapOptions = {
-        center: { lat: 38.0356849, lng: -78.5131093 },
+        center: { lat: 38.0456849, lng: -78.5031093 },
         zoom: 15,
       };
       const map = new google.maps.Map(document.getElementById("map"), mapOptions);
@@ -147,11 +162,15 @@
   </script>
 </body>
 
-
-
-<div>
+<div id = "results">
   <span>Distance: <span id="distance"></span></span>
   <br>
   <span>Emissions: <span id="emissions"></span></span>
 </div>
+<style>
+  #results{
+    text-align: center;
+  }
+</style>
+
 </html>
