@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Maps Example</title>
+   <div id = "button-column">
+    <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
+    <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
+    <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
+    <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
+  </div>
+  <div>
+    <label for="origin">Origin:</label>
+    <input type="text" id="origin" name="origin">
+    <label for="destination">Destination:</label>
+    <input type="text" id="destination" name="destination">
+    <button onclick="calculateRoutes()">Calculate Routes</button>
+  </div>
   <style>
     #map {
       height: 400px;
@@ -18,7 +31,7 @@
       flex-direction: column;
       width: 10%;
       float: left;
-      padding: 25px 10px;
+      padding: 25px 20px;
       box-sizing: border-box;
     }
     #controls > div {
@@ -46,13 +59,6 @@
 <body>
   <div id="map"></div>
   <div>
-    <label for="origin">Origin:</label>
-    <input type="text" id="origin" name="origin">
-    <label for="destination">Destination:</label>
-    <input type="text" id="destination" name="destination">
-    <button onclick="calculateRoutes()">Calculate Routes</button>
-  </div>
-  <div>
     <h3>Car Information</h3>
     <label for="fuel-efficiency">Fuel Efficiency for Car(mpg):</label>
     <input type="number" id="fuel-efficiency" name="fuel-efficiency" step="0.1">
@@ -62,17 +68,6 @@
       <option value="gas">Gas</option>
       <option value="diesel">Diesel</option>
     </select>
-  </div>
-  <div>
-    <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
-    <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
-    <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
-    <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
-  </div>
-  <div>
-    <span>Distance: <span id="distance"></span></span>
-    <br>
-    <span>Emissions: <span id="emissions"></span></span>
   </div>
   <div>
     <h3>CO2 Emissions Comparison</h3>
