@@ -16,15 +16,12 @@
 </head>
 <body>
   <div id="map"></div>
-
   <script>
     function initMap() {
-      // Set the initial map center and zoom level
       const mapOptions = {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
+        center: { lat: 38.0356849, lng: -78.5131093 },
+        zoom: 15,
       };
-      // Create a new Google Maps object and attach it to the 'map' div
       const map = new google.maps.Map(document.getElementById("map"), mapOptions);
       directionsService = new google.maps.DirectionsService();
       directionsRenderer = new google.maps.DirectionsRenderer();
@@ -34,7 +31,11 @@
     function showRoute(travelMode) {
       const route = calculatedRoutes[travelMode];
       if (route) {
-        directionsRenderer.setDirections(route);
+        directionsRenderer.setDirections(route.result);
+        const distance = route.distance;
+        const emissions = calculateCarbonEmissions(distance);
+        document.getElementById("distance").textContent = distance;
+        document.getElementById("emissions").textContent = emissions;
       }
     }
 
@@ -42,7 +43,7 @@
       const origin = document.getElementById("origin").value;
       const destination = document.getElementById("destination").value;
       if (!origin || !destination) {
-        alert("Please enter an origin and destination.");
+        alert("Please select an origin and destination.");
         return;
       }
       const travelModes = [
@@ -54,8 +55,8 @@
       travelModes.forEach((mode) => {
         calculateRouteForMode(origin, destination, mode);
       });
+      showRoute(google.maps.TravelMode.DRIVING); // Show driving route by default
     }
-
     const calculatedRoutes = {};
     function calculateRouteForMode(origin, destination, travelMode) {
       const request = {
@@ -77,26 +78,13 @@
       });
     }
 
-    function showRoute(travelMode) {
-      const route = calculatedRoutes[travelMode];
-      if (route) {
-        directionsRenderer.setDirections(route.result);
-        const distance = route.distance;
-        const emissions = calculateCarbonEmissions(distance);
-        document.getElementById("distance").textContent = distance;
-        document.getElementById("emissions").textContent = emissions;
-      }
-    }
-
-
     function calculateCarbonEmissions(distance) {
       const emissionFactor = (calculatedRoutes[google.maps.TravelMode.BICYCLING].distance < distance) ? 100 : 10;
       const distanceInKm = distance / 1000;
       const emissionsInGrams = distanceInKm * emissionFactor;
       return emissionsInGrams;
     }
-
-  </script>
+</script>
 </body>
 <div>
   <label for="origin">Origin:</label>
@@ -116,4 +104,5 @@
   <br>
   <span>Emissions: <span id="emissions"></span></span>
 </div>
+</html>
 </html>
