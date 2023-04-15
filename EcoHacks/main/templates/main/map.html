@@ -30,35 +30,32 @@
       directionsRenderer = new google.maps.DirectionsRenderer();
       directionsRenderer.setMap(map);
     }
+
     function showRoute(travelMode) {
       const route = calculatedRoutes[travelMode];
-
       if (route) {
         directionsRenderer.setDirections(route);
-      } else {
-        alert("Please calculate the routes first.");
       }
     }
+
     function calculateRoutes() {
       const origin = document.getElementById("origin").value;
       const destination = document.getElementById("destination").value;
-
       if (!origin || !destination) {
         alert("Please enter an origin and destination.");
         return;
       }
-
       const travelModes = [
         google.maps.TravelMode.DRIVING,
         google.maps.TravelMode.TRANSIT,
-        google.maps.TravelMode.BICYCLING, // For biking
-        google.maps.TravelMode.WALKING, // For walking
+        google.maps.TravelMode.BICYCLING,
+        google.maps.TravelMode.WALKING,
       ];
-
       travelModes.forEach((mode) => {
         calculateRouteForMode(origin, destination, mode);
       });
     }
+
     const calculatedRoutes = {};
     function calculateRouteForMode(origin, destination, travelMode) {
       const request = {
@@ -66,17 +63,39 @@
         destination: destination,
         travelMode: travelMode,
       };
-
       directionsService.route(request, (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
           console.log(`Route for ${travelMode}:`, result);
-          // Store the calculated route in the calculatedRoutes object
-          calculatedRoutes[travelMode] = result;
+          // Store the calculated route and distance in the calculatedRoutes object
+          calculatedRoutes[travelMode] = {
+            result: result,
+            distance: result.routes[0].legs[0].distance.value, // store the distance in meters
+          };
         } else {
           console.error(`Error getting directions for ${travelMode}:`, status);
         }
       });
     }
+
+    function showRoute(travelMode) {
+      const route = calculatedRoutes[travelMode];
+      if (route) {
+        directionsRenderer.setDirections(route.result);
+        const distance = route.distance;
+        const emissions = calculateCarbonEmissions(distance);
+        document.getElementById("distance").textContent = distance;
+        document.getElementById("emissions").textContent = emissions;
+      }
+    }
+
+
+    function calculateCarbonEmissions(distance) {
+      const emissionFactor = (calculatedRoutes[google.maps.TravelMode.BICYCLING].distance < distance) ? 100 : 10;
+      const distanceInKm = distance / 1000;
+      const emissionsInGrams = distanceInKm * emissionFactor;
+      return emissionsInGrams;
+    }
+
   </script>
 </body>
 <div>
@@ -91,5 +110,10 @@
   <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
   <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
   <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
+</div>
+<div>
+  <span>Distance: <span id="distance"></span></span>
+  <br>
+  <span>Emissions: <span id="emissions"></span></span>
 </div>
 </html>
