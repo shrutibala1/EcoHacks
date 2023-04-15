@@ -1,3 +1,103 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Google Maps Example</title>-->
+<!--  <style>-->
+<!--    #map {-->
+<!--      height: 400px;-->
+<!--      width: 100%;-->
+<!--    }-->
+<!--  </style>-->
+<!--  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4twqZA-AhOLxsZiKICQgST-pzMfTcxgA&callback=initMap"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--  <div id="map"></div>-->
+
+<!--  <script>-->
+<!--    function initMap() {-->
+<!--      // Set the initial map center and zoom level-->
+<!--      const mapOptions = {-->
+<!--        center: { lat: -34.397, lng: 150.644 },-->
+<!--        zoom: 8,-->
+<!--      };-->
+
+<!--      // Create a new Google Maps object and attach it to the 'map' div-->
+<!--      const map = new google.maps.Map(document.getElementById("map"), mapOptions);-->
+
+<!--      // Get the values of 'location' and 'destination' from the URL-->
+<!--      const urlParams = new URLSearchParams(window.location.search);-->
+<!--      const origin = urlParams.get('location');-->
+<!--      const destination = urlParams.get('destination');-->
+
+<!--      // Get the values of 'hidden-location' and 'hidden-destination'-->
+<!--      const hiddenLocation = urlParams.get('hidden-location');-->
+<!--      const hiddenDestination = urlParams.get('hidden-destination');-->
+
+<!--      // Set the values of the 'location' and 'destination' fields in the form-->
+<!--      document.getElementById('location').value = hiddenLocation || origin;-->
+<!--      document.getElementById('destination').value = hiddenDestination || destination;-->
+<!--      // Initialize the directions service and renderer-->
+<!--      const directionsService = new google.maps.DirectionsService();-->
+<!--      const directionsRenderer = new google.maps.DirectionsRenderer();-->
+<!--      directionsRenderer.setMap(map);-->
+
+<!--      // Calculate the routes-->
+<!--      calculateRoutes(directionsService, directionsRenderer, origin, destination);-->
+<!--    }-->
+
+<!--    function calculateRoutes(directionsService, directionsRenderer, origin, destination) {-->
+<!--      if (!origin || !destination) {-->
+<!--        alert("Please enter an origin and destination.");-->
+<!--        return;-->
+<!--      }-->
+
+<!--      const travelModes = [-->
+<!--        google.maps.TravelMode.DRIVING,-->
+<!--        google.maps.TravelMode.TRANSIT,-->
+<!--        google.maps.TravelMode.BICYCLING, // For biking-->
+<!--        google.maps.TravelMode.WALKING, // For walking-->
+<!--      ];-->
+
+<!--      travelModes.forEach((mode) => {-->
+<!--        calculateRouteForMode(directionsService, directionsRenderer, origin, destination, mode);-->
+<!--      });-->
+<!--    }-->
+
+<!--    function calculateRouteForMode(directionsService, directionsRenderer, origin, destination, travelMode) {-->
+<!--      const request = {-->
+<!--        origin: origin,-->
+<!--        destination: destination,-->
+<!--        travelMode: travelMode,-->
+<!--      };-->
+
+<!--      directionsService.route(request, (result, status) => {-->
+<!--        if (status === google.maps.DirectionsStatus.OK) {-->
+<!--          console.log(`Route for ${travelMode}:`, result);-->
+<!--          // Display the calculated route on the map-->
+<!--        }-->
+<!--      });-->
+<!--    }-->
+<!--  </script>-->
+<!--</body>-->
+<!--<div>-->
+<!--    import { location, destination } from './script.js';-->
+<!--    <label for="location">Location:</label>-->
+<!--    <input type="text" id="location" name="location">-->
+<!--    <br>-->
+<!--    <label for="destination">Destination:</label>-->
+<!--    <input type="text" id="destination" name="destination">-->
+<!--    <br>-->
+<!--    <button onclick="calculateRoutes()">Calculate Routes</button>-->
+<!--  </div>-->
+<!--<div>-->
+<!--  <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>-->
+<!--  <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>-->
+<!--  <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>-->
+<!--  <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>-->
+<!--</div>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,11 +111,12 @@
     }
   </style>
   <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4twqZA-AhOLxsZiKICQgST-pzMfTcxgA&callback=initMap"></script>
-</head>
-<body>
-  <div id="map"></div>
-
   <script>
+    // Declare the variables outside the initMap() function
+    let map;
+    let directionsService;
+    let directionsRenderer;
+
     function initMap() {
       // Set the initial map center and zoom level
       const mapOptions = {
@@ -24,8 +125,18 @@
       };
 
       // Create a new Google Maps object and attach it to the 'map' div
-      const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
+      // Initialize the directions service and renderer
+      directionsService = new google.maps.DirectionsService();
+      directionsRenderer = new google.maps.DirectionsRenderer();
+      directionsRenderer.setMap(map);
+
+      // Call the calculateRoutes() function after the map is initialized
+      calculateRoutes();
+    }
+
+    function calculateRoutes() {
       // Get the values of 'location' and 'destination' from the URL
       const urlParams = new URLSearchParams(window.location.search);
       const origin = urlParams.get('location');
@@ -38,34 +149,20 @@
       // Set the values of the 'location' and 'destination' fields in the form
       document.getElementById('location').value = hiddenLocation || origin;
       document.getElementById('destination').value = hiddenDestination || destination;
-      // Initialize the directions service and renderer
-      const directionsService = new google.maps.DirectionsService();
-      const directionsRenderer = new google.maps.DirectionsRenderer();
-      directionsRenderer.setMap(map);
-
-      // Calculate the routes
-      calculateRoutes(directionsService, directionsRenderer, origin, destination);
-    }
-
-    function calculateRoutes(directionsService, directionsRenderer, origin, destination) {
-      if (!origin || !destination) {
-        alert("Please enter an origin and destination.");
-        return;
-      }
 
       const travelModes = [
         google.maps.TravelMode.DRIVING,
         google.maps.TravelMode.TRANSIT,
-        google.maps.TravelMode.BICYCLING, // For biking
-        google.maps.TravelMode.WALKING, // For walking
+        google.maps.TravelMode.BICYCLING,
+        google.maps.TravelMode.WALKING,
       ];
 
       travelModes.forEach((mode) => {
-        calculateRouteForMode(directionsService, directionsRenderer, origin, destination, mode);
+        calculateRouteForMode(origin, destination, mode);
       });
     }
 
-    function calculateRouteForMode(directionsService, directionsRenderer, origin, destination, travelMode) {
+    function calculateRouteForMode(origin, destination, travelMode) {
       const request = {
         origin: origin,
         destination: destination,
@@ -76,12 +173,14 @@
         if (status === google.maps.DirectionsStatus.OK) {
           console.log(`Route for ${travelMode}:`, result);
           // Display the calculated route on the map
+          directionsRenderer.setDirections(result);
         }
       });
     }
   </script>
-</body>
-<div>
+</head>
+<body>
+  <div>
     <label for="location">Location:</label>
     <input type="text" id="location" name="location">
     <br>
@@ -89,11 +188,23 @@
     <input type="text" id="destination" name="destination">
     <br>
     <button onclick="calculateRoutes()">Calculate Routes</button>
+    <script>
+  const calculateBtn = document.getElementById('calculate-btn');
+
+  calculateBtn.addEventListener('click', () => {
+    const origin = document.getElementById('location').value;
+    const destination = document.getElementById('destination').value;
+    calculateRoutes(directionsService, directionsRenderer, origin, destination);
+  });
+</script>
   </div>
-<div>
-  <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
-  <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
-  <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
-  <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
-</div>
+  <div>
+    <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
+    <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
+    <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
+    <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
+  </div>
+  <div id="map"></div>
+</body>
 </html>
+
