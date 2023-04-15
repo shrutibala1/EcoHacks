@@ -108,8 +108,8 @@
     }
 
     function calculateCarbonEmissionsForPublicTransport(distance) {
-      const distanceInMiles = distance * 0.000621371; // Convert distance from meters to miles
-      const averageEmissionsPerMile = 404; // The average passenger vehicle emits about 404 grams of CO2 per mile
+      const distanceInMiles = distance * 0.000621371;
+      const averageEmissionsPerMile = 84.5783;
       const emissionsInGrams = distanceInMiles * averageEmissionsPerMile;
 
       return emissionsInGrams;
