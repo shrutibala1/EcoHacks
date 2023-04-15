@@ -1,4 +1,11 @@
 <h1> Hello </h1>
 
-
-<button type="button" class="btn btn-primary" onclick="window.location.href='main/go-map'">Go</button>
+<form action="main/go-map" method="get">
+  <label for="location">Location:</label>
+  <input type="text" id="location" name="location">
+  <br>
+  <label for="destination">Destination:</label>
+  <input type="text" id="destination" name="destination">
+  <br>
+  <input type="submit" value="Go to Map">
+</form>

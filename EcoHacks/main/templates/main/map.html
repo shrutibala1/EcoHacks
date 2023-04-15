@@ -19,6 +19,7 @@
 
   <script>
     function initMap() {
+
       // Set the initial map center and zoom level
       const mapOptions = {
         center: { lat: -34.397, lng: 150.644 },
@@ -40,10 +41,13 @@
       }
     }
     function calculateRoutes() {
-      const origin = document.getElementById("origin").value;
-      const destination = document.getElementById("destination").value;
+<!--      const origin = document.getElementById("origin").value;-->
+<!--      const destination = document.getElementById("destination").value;-->
+      const urlParams = new URLSearchParams(window.location.search);
+      const origin = urlParams.get('location');
+      const destination = urlParams.get('destination');
 
-      if (!origin || !destination) {
+      if (!location || !destination) {
         alert("Please enter an origin and destination.");
         return;
       }
