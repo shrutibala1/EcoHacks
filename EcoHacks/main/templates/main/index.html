@@ -1,6 +1,57 @@
-{% extends 'base.html' %}
+{% extends 'main/base.html' %}
 
 {% block content %}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <style>
+        .alert {
+            background-color: #F7F7F7;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px #BDBDBD;
+            padding: 20px;
+            margin: 50px auto;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h3 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        a {
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            color: #3498DB;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+
+        a:hover {
+            color: #21618C;
+        }
+
+        .btn {
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            background-color: #3498DB;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+
+        .btn:hover {
+            background-color: #21618C;
+        }
+    </style>
+
+ <div class="centered-content"> <!-- Add this line -->
     {% if user.is_authenticated %}
         <div class="alert alert-success" role="alert">
             <h3>Welcome {{ user.username }}!</h3>
@@ -14,4 +65,5 @@
             <a href="{% url 'login' %}">Login</a>
         </div>
     {% endif %}
+     </div> <!-- Add this line -->
 {% endblock %}

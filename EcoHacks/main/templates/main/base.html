@@ -10,6 +10,7 @@
             .wrapper {
                 min-height: 100vh;
                 position: relative;
+                background-color: #ECFFD9;
             }
 
             /* Set the padding bottom of the wrapper to accommodate the height of the footer */
@@ -26,12 +27,23 @@
                 width: 100%;
                 height: 50px; /* Set this to the height of your footer */
             }
+
+            /* Set the color of the navbar to a dark green */
+            .navbar {
+                background-color: #0b6633;
+            }
+
+            /* Remove margin and padding from body */
+            body {
+                padding: 0;
+                margin: 0;
+            }
         </style>
     </head>
-    <body class="container">
+    <body class="container-fluid">
         <div class="wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand mr-3"  href="#">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand mr-3 text-white"  href="#">
                     GreenWay
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,10 +53,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active mr-2">
-                            <a class="nav-link" href="http://127.0.0.1:8000/"> Home <span class="sr-only">(current)</span></a>
+                            <a class="nav-link text-white" href="http://127.0.0.1:8000/"> Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item mr-2">
-                            <a class="nav-link" href="http://127.0.0.1:8000/about/"> About </a>
+                            <a class="nav-link text-white" href="http://127.0.0.1:8000/about/"> About </a>
                         </li>
                     </ul>
                 </div>
