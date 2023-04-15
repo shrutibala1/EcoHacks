@@ -3,23 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <div>
+  <label for="origin">Origin:</label>
+  <input type="text" id="origin" name="origin">
+  <label for="destination">Destination:</label>
+  <input type="text" id="destination" name="destination">
+  <button onclick="calculateRoutes()">Calculate Routes</button>
+  </div>
+  choose the button you want!
+  <div id="button-column">
+  <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
+  <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
+  <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
+  <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
+  </div>
+
+
   <title>Google Maps Example</title>
   <style>
     #map {
       height: 400px;
-      width: 100%;
+      width: calc(100% - 300px);
+      padding-right: 30px;
+      margin: 25px auto; /* Center the map horizontally */
+      display: block; /* Set display property to block to center the map */
+
+    }
+    #button-column {
+      display: flex;
+      flex-direction: column;
+      width: 10%;
+      float: left;
+      padding: 25px 10px;
+      box-sizing: border-box;
+    }
+    #controls > div {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #0077cc;
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005ea8;
     }
   </style>
   <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4twqZA-AhOLxsZiKICQgST-pzMfTcxgA&callback=initMap">
   </script>
 </head>
+
 <body>
   <div id="map"></div>
   <script>
     function initMap() {
       const mapOptions = {
-        center: { lat: 38.0356849, lng: -78.5131093 },
+        center: { lat: 38.0456849, lng: -78.5031093 },
         zoom: 15,
       };
       const map = new google.maps.Map(document.getElementById("map"), mapOptions);
@@ -116,33 +161,16 @@
     }
   </script>
 </body>
-<div>
-  <label for="origin">Origin:</label>
-  <input type="text" id="origin" name="origin">
-  <label for="destination">Destination:</label>
-  <input type="text" id="destination" name="destination">
-  <button onclick="calculateRoutes()">Calculate Routes</button>
-</div>
-<div>
-  <h3>Car Information</h3>
-  <label for="fuel-efficiency">Fuel Efficiency for Car(mpg):</label>
-  <input type="number" id="fuel-efficiency" name="fuel-efficiency" step="0.1">
-  <br>
-  <label for="fuel-type">Fuel Type for Car:</label>
-  <select id="fuel-type" name="fuel-type">
-    <option value="gas">Gas</option>
-    <option value="diesel">Diesel</option>
-  </select>
-</div>
-<div>
-  <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
-  <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
-  <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
-  <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
-</div>
-<div>
+
+<div id = "results">
   <span>Distance: <span id="distance"></span></span>
   <br>
   <span>Emissions: <span id="emissions"></span></span>
 </div>
+<style>
+  #results{
+    text-align: center;
+  }
+</style>
+
 </html>
