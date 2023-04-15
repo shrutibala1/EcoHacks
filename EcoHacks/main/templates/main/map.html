@@ -39,8 +39,10 @@
           emissions = calculateCarbonEmissionsForCar(distance);
         } else if (travelMode === google.maps.TravelMode.TRANSIT) {
           emissions = calculateCarbonEmissionsForPublicTransport(distance);
-        } else {
-          emissions = 0; // No emissions for biking and walking
+        } else if (travelMode === google.maps.TravelMode.BICYCLING) {
+          emissions = calculateCarbonEmissionsForBiking(distance);
+        } else if (travelMode === google.maps.TravelMode.WALKING) {
+          emissions = calculateCarbonEmissionsForWalking(distance);
         }
 
         document.getElementById("distance").textContent = distance;
@@ -113,6 +115,22 @@
       const emissionsInGrams = distanceInMiles * averageEmissionsPerMile;
 
       return emissionsInGrams;
+    }
+
+    function calculateCarbonEmissionsForBiking(distance) {
+      const distanceInMiles = distance * 0.000621371; // Convert distance from meters to miles
+      const emissionsPerMile = 0.017 / 2; // 0.017 kg CO2 for 2 miles
+      const emissionsInKilograms = distanceInMiles * emissionsPerMile;
+
+      return emissionsInKilograms * 1000; // Convert kilograms to grams
+    }
+
+    function calculateCarbonEmissionsForWalking(distance) {
+      const distanceInMiles = distance * 0.000621371; // Convert distance from meters to miles
+      const emissionsPerMile = 0.039 / 2; // 0.039 kg CO2 for 2 miles
+      const emissionsInKilograms = distanceInMiles * emissionsPerMile;
+
+      return emissionsInKilograms * 1000; // Convert kilograms to grams
     }
   </script>
 </body>
