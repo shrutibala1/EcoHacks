@@ -82,7 +82,7 @@
         document.getElementById("distance").textContent = distance;
         document.getElementById("emissions").textContent = emissions;
 
-        createEmissionsChart(emissions); // Call the createEmissionsChart function with trip emissions
+        createEmissionsChart(emissions);
       }
     }
 
@@ -103,7 +103,7 @@
       travelModes.forEach((mode) => {
         calculateRouteForMode(origin, destination, mode);
       });
-      showRoute(google.maps.TravelMode.DRIVING); // Show driving route by default
+      showRoute(google.maps.TravelMode.DRIVING);
     }
     const calculatedRoutes = {};
     function calculateRouteForMode(origin, destination, travelMode) {
@@ -135,9 +135,9 @@
       let co2EmissionsPerGallon = 0;
 
       if (fuelType === "gas") {
-        co2EmissionsPerGallon = 8887; // grams CO2 per gallon for gasoline
+        co2EmissionsPerGallon = 8887;
       } else if (fuelType === "diesel") {
-        co2EmissionsPerGallon = 10180; // grams CO2 per gallon for diesel
+        co2EmissionsPerGallon = 10180;
       }
 
       const gallonsConsumed = distanceInMiles / fuelEfficiency;
@@ -155,11 +155,11 @@
     }
 
     function calculateCarbonEmissionsForBiking(distance) {
-      const distanceInMiles = distance * 0.000621371; // Convert distance from meters to miles
-      const emissionsPerMile = 0.017 / 2; // 0.017 kg CO2 for 2 miles
+      const distanceInMiles = distance * 0.000621371;
+      const emissionsPerMile = 0.017 / 2;
       const emissionsInKilograms = distanceInMiles * emissionsPerMile;
 
-      return emissionsInKilograms * 1000; // Convert kilograms to grams
+      return emissionsInKilograms * 1000;
     }
 
     function calculateCarbonEmissionsForWalking(distance) {
@@ -168,7 +168,7 @@
       const emissionsInKilograms = distanceInMiles * emissionsPerMile;
       return emissionsInKilograms * 1000; // Convert kilograms to grams
     }
-    let emissionsChart; // Declare a global variable to store the chart instance
+    let emissionsChart;
     function createEmissionsChart(tripEmissions) {
       const ctx = document.getElementById('emissionsChart').getContext('2d');
       // Destroy the previous chart instance if it exists
