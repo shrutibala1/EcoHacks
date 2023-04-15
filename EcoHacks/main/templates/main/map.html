@@ -7,7 +7,35 @@
   <style>
     #map {
       height: 400px;
-      width: 100%;
+      width: calc(100% - 300px);
+      padding-right: 30px;
+      margin: 25px auto; /* Center the map horizontally */
+      display: block; /* Set display property to block to center the map */
+
+    }
+    #button-column {
+      display: flex;
+      flex-direction: column;
+      width: 10%;
+      float: left;
+      padding: 25px 10px;
+      box-sizing: border-box;
+    }
+    #controls > div {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #0077cc;
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005ea8;
     }
   </style>
   <script async
@@ -53,7 +81,7 @@
     <script>
     function initMap() {
       const mapOptions = {
-        center: { lat: 38.0356849, lng: -78.5131093 },
+        center: { lat: 38.0456849, lng: -78.5031093 },
         zoom: 15,
       };
       const map = new google.maps.Map(document.getElementById("map"), mapOptions);
@@ -103,7 +131,7 @@
       travelModes.forEach((mode) => {
         calculateRouteForMode(origin, destination, mode);
       });
-      showRoute(google.maps.TravelMode.DRIVING);
+      showRoute(google.maps.TravelMode.DRIVING); // Show driving route by default
     }
     const calculatedRoutes = {};
     function calculateRouteForMode(origin, destination, travelMode) {
@@ -135,9 +163,9 @@
       let co2EmissionsPerGallon = 0;
 
       if (fuelType === "gas") {
-        co2EmissionsPerGallon = 8887;
+        co2EmissionsPerGallon = 8887; // grams CO2 per gallon for gasoline
       } else if (fuelType === "diesel") {
-        co2EmissionsPerGallon = 10180;
+        co2EmissionsPerGallon = 10180; // grams CO2 per gallon for diesel
       }
 
       const gallonsConsumed = distanceInMiles / fuelEfficiency;
@@ -207,4 +235,16 @@
     }
   </script>
 </body>
+
+<div id = "results">
+  <span>Distance: <span id="distance"></span></span>
+  <br>
+  <span>Emissions: <span id="emissions"></span></span>
+</div>
+<style>
+  #results{
+    text-align: center;
+  }
+</style>
+
 </html>

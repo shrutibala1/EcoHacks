@@ -1,4 +1,3 @@
-<h1> Hello </h1>
-
-
-<button type="button" class="btn btn-primary" onclick="window.location.href='main/go-map'">Go</button>
+{% extends 'main/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}         <div class="alert alert-success" role="alert">             <h3>Welcome {{ user.username }}!</h3>             <a href="{% url 'logout' %}">Logout?</a>             <button type="button" class="btn btn-primary" onclick="window.location.href='main/go-map'">Go</button>         </div>     {% else %}         <div class="alert alert-success" role="alert">             <h3>Welcome!</h3>             <a href="{% url 'register' %}">Signup</a>             <a href="{% url 'login' %}">Login</a>         </div>     {% endif %} {% endblock %}
