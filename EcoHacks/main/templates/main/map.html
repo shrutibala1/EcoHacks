@@ -1,25 +1,42 @@
+
 <!DOCTYPE html>
+{% extends 'main/base.html' %}
+{% block content %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <div>
-  <label for="origin">Origin:</label>
-  <input type="text" id="origin" name="origin">
-  <label for="destination">Destination:</label>
-  <input type="text" id="destination" name="destination">
-  <button onclick="calculateRoutes()">Calculate Routes</button>
-  </div>
-  choose the button you want!
-  <div id="button-column">
-  <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
-  <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
-  <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
-  <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
-  </div>
-
-
   <title>Google Maps Example</title>
+   <div id = "button-column">
+    <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
+    <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
+    <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
+    <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
+  </div>
+  <style>
+    * {
+      font-family: Arial, sans-serif;
+    }
+  </style>
+
+  <div>
+    <label for="origin">Origin:</label>
+    <input type="text" id="origin" name="origin">
+    <label for="destination">Destination:</label>
+    <input type="text" id="destination" name="destination">
+    <button onclick="calculateRoutes()">Calculate Routes</button>
+  </div>
+  <div>
+    <h3>Car Information</h3>
+    <label for="fuel-efficiency">Fuel Efficiency for Car(mpg):</label>
+    <input type="number" id="fuel-efficiency" name="fuel-efficiency" step="0.1">
+    <br>
+    <label for="fuel-type">Fuel Type for Car:</label>
+    <select id="fuel-type" name="fuel-type">
+      <option value="gas">Gas</option>
+      <option value="diesel">Diesel</option>
+    </select>
+  </div>
   <style>
     #map {
       height: 400px;
@@ -34,12 +51,16 @@
       flex-direction: column;
       width: 10%;
       float: left;
-      padding: 25px 10px;
+      padding: 250px 20px 20px 20px; /* Move buttons down */
       box-sizing: border-box;
     }
-    #controls > div {
-      margin-bottom: 20px;
+
+
+    #controls {
+      width: 30%; /* Set width of element */
+      margin: 25px 0 25px auto; /* Move element to the right */
     }
+
     button {
       padding: 10px;
       border-radius: 5px;
@@ -57,11 +78,16 @@
   <script async
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4twqZA-AhOLxsZiKICQgST-pzMfTcxgA&callback=initMap">
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
   <div id="map"></div>
-  <script>
+
+  <div>
+    <h3>CO2 Emissions Comparison</h3>
+    <canvas id="emissionsChart"></canvas>
+  </div>
+    <script>
     function initMap() {
       const mapOptions = {
         center: { lat: 38.0456849, lng: -78.5031093 },
@@ -84,14 +110,19 @@
           emissions = calculateCarbonEmissionsForCar(distance);
         } else if (travelMode === google.maps.TravelMode.TRANSIT) {
           emissions = calculateCarbonEmissionsForPublicTransport(distance);
-        } else {
-          emissions = 0; // No emissions for biking and walking
+        } else if (travelMode === google.maps.TravelMode.BICYCLING) {
+          emissions = calculateCarbonEmissionsForBiking(distance);
+        } else if (travelMode === google.maps.TravelMode.WALKING) {
+          emissions = calculateCarbonEmissionsForWalking(distance);
         }
 
-        document.getElementById("distance").textContent = distance;
-        document.getElementById("emissions").textContent = emissions;
+        document.getElementById("distance").textContent = distance + " meters";
+        document.getElementById("emissions").textContent = emissions + " grams";
+
+        createEmissionsChart(emissions);
       }
     }
+
 
     function calculateRoutes() {
       const origin = document.getElementById("origin").value;
@@ -159,6 +190,58 @@
 
       return emissionsInGrams;
     }
+
+    function calculateCarbonEmissionsForBiking(distance) {
+      const distanceInMiles = distance * 0.000621371;
+      const emissionsPerMile = 0.017 / 2;
+      const emissionsInKilograms = distanceInMiles * emissionsPerMile;
+
+      return emissionsInKilograms * 1000;
+    }
+
+    function calculateCarbonEmissionsForWalking(distance) {
+      const distanceInMiles = distance * 0.000621371; // Convert distance from meters to miles
+      const emissionsPerMile = 0.039 / 2; // 0.039 kg CO2 for 2 miles
+      const emissionsInKilograms = distanceInMiles * emissionsPerMile;
+      return emissionsInKilograms * 1000; // Convert kilograms to grams
+    }
+    let emissionsChart;
+    function createEmissionsChart(tripEmissions) {
+      const ctx = document.getElementById('emissionsChart').getContext('2d');
+      // Destroy the previous chart instance if it exists
+      if (emissionsChart) {
+        emissionsChart.destroy();
+      }
+      const dailyAllowedEmissions = 4000;
+      const chartData = {
+        labels: ['Daily Allowed', 'Trip Emissions'],
+        datasets: [{
+          label: 'CO2 Emissions (grams)',
+          data: [dailyAllowedEmissions, tripEmissions],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 99, 132, 1)',
+          ],
+          borderWidth: 1,
+        }]
+      };
+      const chartOptions = {
+        scales: {
+          y: {
+            beginAtZero: true,
+          }
+        },
+      };
+      emissionsChart = new Chart(ctx, { // Store the chart instance in the global variable
+        type: 'bar',
+        data: chartData,
+        options: chartOptions,
+      });
+    }
   </script>
 </body>
 
@@ -168,9 +251,26 @@
   <span>Emissions: <span id="emissions"></span></span>
 </div>
 <style>
-  #results{
-    text-align: center;
+    #info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #results {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 50%;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+  }
+  #emissionsChart {
+    max-width: 80%; /* Control chart width */
+    margin: 0 auto; /* Center chart horizontally */
   }
 </style>
 
 </html>
+
+{% endblock %}
