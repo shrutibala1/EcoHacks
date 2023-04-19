@@ -54,13 +54,14 @@
  <div class="centered-content"> <!-- Add this line -->
     {% if user.is_authenticated %}
         <div class="alert alert-success" role="alert">
-            <h3>Welcome {{ user.username }}!</h3>
+            <h3>Welcome to GreenWay, {{ user.username }}!</h3>
             <a href="{% url 'logout' %}">Logout?</a>
             <button type="button" class="btn btn-primary" onclick="window.location.href='main/go-map'">Go</button>
         </div>
     {% else %}
         <div class="alert alert-success" role="alert">
-            <h3>Welcome!</h3>
+            <h3>Welcome to GreenWay!</h3>
+            <p>Log in or make an account to track your carbon footprint</p>
             <a href="{% url 'register' %}">Signup</a>
             <a href="{% url 'login' %}">Login</a>
         </div>

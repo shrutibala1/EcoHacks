@@ -7,27 +7,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Maps Example</title>
-   <div id = "button-column">
-    <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
-    <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
-    <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
-    <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
-  </div>
   <style>
     * {
       font-family: Arial, sans-serif;
-    }
-  </style>
+    }</style>
 
-  <div>
+
+  <div id = location-text>
     <label for="origin">Origin:</label>
     <input type="text" id="origin" name="origin">
     <label for="destination">Destination:</label>
     <input type="text" id="destination" name="destination">
     <button onclick="calculateRoutes()">Calculate Routes</button>
   </div>
-  <div>
-    <h3>Car Information</h3>
+  <style>
+    #location-text {
+      margin-top: 15px;
+      text-align: center;
+      align-items: center;
+    }
+  </style>
+  <div id = car-info>
     <label for="fuel-efficiency">Fuel Efficiency for Car(mpg):</label>
     <input type="number" id="fuel-efficiency" name="fuel-efficiency" step="0.1">
     <br>
@@ -38,11 +38,17 @@
     </select>
   </div>
   <style>
+    #car-info{
+      margin-top: 10px;
+      text-align: center;
+      align-items: center;
+    }
     #map {
       height: 400px;
       width: calc(100% - 300px);
-      padding-right: 30px;
-      margin: 25px auto; /* Center the map horizontally */
+      margin: 25px auto;
+      text-align: center;
+      align-items: center;
       display: block; /* Set display property to block to center the map */
 
     }
@@ -51,7 +57,6 @@
       flex-direction: column;
       width: 10%;
       float: left;
-      padding: 250px 20px 20px 20px; /* Move buttons down */
       box-sizing: border-box;
     }
 
@@ -83,10 +88,34 @@
 <body>
   <div id="map"></div>
 
-  <div>
+  <div id = "button-row">
+    <button onclick="showRoute(google.maps.TravelMode.DRIVING)">Driving</button>
+    <button onclick="showRoute(google.maps.TravelMode.TRANSIT)">Public Transport</button>
+    <button onclick="showRoute(google.maps.TravelMode.BICYCLING)">Biking</button>
+    <button onclick="showRoute(google.maps.TravelMode.WALKING)">Walking</button>
+  </div>
+  <style>
+    #button-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  #button-row button {
+    display: inline-block;
+    margin: 10px;
+  }
+  </style>
+
+  <div id ="chart-title">
     <h3>CO2 Emissions Comparison</h3>
     <canvas id="emissionsChart"></canvas>
   </div>
+  <style>
+    #chart-title{
+      margin: 15px 25px auto;
+    }
+  </style>
     <script>
     function initMap() {
       const mapOptions = {
@@ -258,12 +287,14 @@
   }
   #results {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: center;
+    justify-content: space-evenly;
     width: 50%;
     font-size: 16px;
-    font-family: Arial, sans-serif;
-    margin-bottom: 20px;
+    margin: 25px auto;
+    text-align: center;
+    align-items: center;
+
   }
   #emissionsChart {
     max-width: 80%; /* Control chart width */
